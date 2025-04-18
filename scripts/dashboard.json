@@ -1,0 +1,118 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "git-insights",
+    "title": "Git Contributor Insights",
+    "timezone": "browser",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "10m",
+    "panels": [
+      {
+        "title": "Top Contributors",
+        "type": "barchart",
+        "gridPos": {
+          "x": 0,
+          "y": 0,
+          "w": 12,
+          "h": 8
+        },
+        "targets": [
+          {
+            "refId": "A",
+            "query": "SELECT sum(count) FROM code_changes WHERE $timeFilter GROUP BY author"
+          }
+        ]
+      },
+      {
+        "title": "Commits Over Time by Author",
+        "type": "timeseries",
+        "gridPos": {
+          "x": 0,
+          "y": 8,
+          "w": 24,
+          "h": 9
+        },
+        "targets": [
+          {
+            "refId": "B",
+            "query": "SELECT sum(count) FROM code_changes WHERE $timeFilter GROUP BY time($__interval), author fill(null)"
+          }
+        ]
+      },
+      {
+        "title": "Lines Added vs Removed",
+        "type": "timeseries",
+        "gridPos": {
+          "x": 0,
+          "y": 17,
+          "w": 24,
+          "h": 9
+        },
+        "targets": [
+          {
+            "refId": "C",
+            "query": "SELECT sum(added) FROM code_changes WHERE $timeFilter GROUP BY time($__interval) fill(null)"
+          },
+          {
+            "refId": "D",
+            "query": "SELECT sum(removed) FROM code_changes WHERE $timeFilter GROUP BY time($__interval) fill(null)"
+          }
+        ]
+      },
+      {
+        "title": "Merged Commits Over Time",
+        "type": "timeseries",
+        "gridPos": {
+          "x": 0,
+          "y": 26,
+          "w": 24,
+          "h": 9
+        },
+        "targets": [
+          {
+            "refId": "E",
+            "query": "SELECT count(count) FROM merged_commits WHERE $timeFilter GROUP BY time($__interval), author fill(null)"
+          }
+        ]
+      },
+      {
+        "title": "Issues Opened vs Closed Over Time",
+        "type": "timeseries",
+        "gridPos": {
+          "x": 0,
+          "y": 35,
+          "w": 24,
+          "h": 9
+        },
+        "targets": [
+          {
+            "refId": "F",
+            "query": "SELECT sum(count) FROM issues WHERE state = 'opened' AND $timeFilter GROUP BY time($__interval), author fill(null)"
+          },
+          {
+            "refId": "G",
+            "query": "SELECT sum(count) FROM issues WHERE state = 'closed' AND $timeFilter GROUP BY time($__interval), author fill(null)"
+          }
+        ]
+      },
+      {
+        "title": "Top Issue Contributors",
+        "type": "barchart",
+        "gridPos": {
+          "x": 0,
+          "y": 44,
+          "w": 24,
+          "h": 9
+        },
+        "targets": [
+          {
+            "refId": "H",
+            "query": "SELECT sum(count) FROM issues WHERE $timeFilter GROUP BY author ORDER BY sum DESC LIMIT 10"
+          }
+        ]
+      }
+    ]
+  },
+  "overwrite": true
+}
